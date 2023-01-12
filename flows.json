@@ -1,0 +1,720 @@
+[
+    {
+        "id": "cedd9dfbf216c7cf",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "6add0a7033982977",
+        "type": "mongodb4-client",
+        "name": "",
+        "protocol": "mongodb",
+        "hostname": "localhost",
+        "port": "27017",
+        "dbName": "todo",
+        "authSource": "",
+        "authMechanism": "DEFAULT",
+        "tls": false,
+        "tlsCAFile": "",
+        "tlsInsecure": false,
+        "uri": "",
+        "advanced": "",
+        "uriTabActive": "tab-uri-simple"
+    },
+    {
+        "id": "f51272d23b1187fe",
+        "type": "http in",
+        "z": "cedd9dfbf216c7cf",
+        "name": "",
+        "url": "/",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 150,
+        "y": 80,
+        "wires": [
+            [
+                "bfbae66849860724"
+            ]
+        ]
+    },
+    {
+        "id": "76617812bd86a86b",
+        "type": "template",
+        "z": "cedd9dfbf216c7cf",
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "<!doctype html>\n<html>\n\n  <head>\n    <meta charset=\"utf-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>TODO BTK</title>\n    <link href=\"https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css\" rel=\"stylesheet\" integrity=\"sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65\" crossorigin=\"anonymous\">\n  </head>\n\n  <body>\n    <div class=\"container mt-5\">\n      {{#error}}\n        <div class=\"alert alert-danger\">\n          {{message}}\n        </div>\n      {{/error}}\n      <form action=\"/add\" method=\"POST\">\n        <div class=\"input-group mb-3\">\n          <input type=\"text\" class=\"form-control\" placeholder=\"Ekmek ve yoğurt al...\" name=\"item\">\n          <button class=\"btn btn-outline-secondary\" type=\"reset\">Temizle</button>\n          <button class=\"btn btn-outline-primary\" type=\"submit\">Ekle</button>\n        </div>\n      </form>\n      <table class=\"table\">\n        <tbody>\n          {{#payload}}\n            <tr>\n              <td>\n                <span class=\"{{#completed}}text-decoration-line-through{{/completed}}\">{{item}}</span>\n              </td>\n              <td>\n                <div class=\"btn-group float-end\" role=\"group\">\n                  {{#visibleReopen}}\n                    <button type=\"button\" class=\"btn btn-warning\" id=\"reopen-btn\" data-id=\"{{_id}}\">Yeniden Aç</button>\n                  {{/visibleReopen}}\n                  {{^visibleReopen}}\n                    <a href=\"/update/{{_id}}\" class=\"btn btn-info\" id=\"update-btn\">Düzenle</a>\n                    <button type=\"button\" class=\"btn btn-success\" id=\"complete-btn\" data-id=\"{{_id}}\">Tamamla</button>\n                    <button type=\"button\" class=\"btn btn-danger\" id=\"trash-btn\" data-id=\"{{_id}}\">Sil</button>\n                  {{/visibleReopen}}\n                </div>\n              </td>\n            </tr>\n          {{/payload}}\n        </tbody>\n      </table>\n    </div>\n    <script src=\"https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js\" integrity=\"sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4\" crossorigin=\"anonymous\"></script>\n    <script src=\"https://code.jquery.com/jquery-3.6.3.min.js\" integrity=\"sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=\" crossorigin=\"anonymous\"></script>\n    <script src=\"js/main.js\"></script>\n  </body>\n\n</html>",
+        "output": "str",
+        "x": 880,
+        "y": 80,
+        "wires": [
+            [
+                "7945937ab06af827"
+            ]
+        ]
+    },
+    {
+        "id": "7945937ab06af827",
+        "type": "http response",
+        "z": "cedd9dfbf216c7cf",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1030,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "f4dec80357898b94",
+        "type": "http in",
+        "z": "cedd9dfbf216c7cf",
+        "name": "",
+        "url": "/add",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 200,
+        "y": 220,
+        "wires": [
+            [
+                "34fc97a62cfe3ea1"
+            ]
+        ]
+    },
+    {
+        "id": "032011e75d77a944",
+        "type": "mongodb4",
+        "z": "cedd9dfbf216c7cf",
+        "clientNode": "6add0a7033982977",
+        "mode": "collection",
+        "collection": "todo",
+        "operation": "insertOne",
+        "output": "toArray",
+        "handleDocId": false,
+        "name": "",
+        "x": 540,
+        "y": 220,
+        "wires": [
+            [
+                "917e47cb933190f9"
+            ]
+        ]
+    },
+    {
+        "id": "34fc97a62cfe3ea1",
+        "type": "function",
+        "z": "cedd9dfbf216c7cf",
+        "name": "function 1",
+        "func": "msg.payload.status = \"Oluşturuldu\"\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 360,
+        "y": 220,
+        "wires": [
+            [
+                "032011e75d77a944"
+            ]
+        ]
+    },
+    {
+        "id": "917e47cb933190f9",
+        "type": "function",
+        "z": "cedd9dfbf216c7cf",
+        "name": "function 2",
+        "func": "if (msg.payload.insertedId) return [msg, null]\n\nmsg.error = {\n    message: \"Kayıt başarısız.\"\n}\nreturn [null, msg];",
+        "outputs": 2,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 700,
+        "y": 220,
+        "wires": [
+            [
+                "4b738a90efc5502b"
+            ],
+            [
+                "bfbae66849860724"
+            ]
+        ],
+        "outputLabels": [
+            "Başarılı",
+            "Başarısız"
+        ]
+    },
+    {
+        "id": "4b738a90efc5502b",
+        "type": "http response",
+        "z": "cedd9dfbf216c7cf",
+        "name": "",
+        "statusCode": "302",
+        "headers": {
+            "location": "/"
+        },
+        "x": 860,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "55e7a552436f3b16",
+        "type": "mongodb4",
+        "z": "cedd9dfbf216c7cf",
+        "clientNode": "6add0a7033982977",
+        "mode": "collection",
+        "collection": "todo",
+        "operation": "find",
+        "output": "toArray",
+        "handleDocId": false,
+        "name": "",
+        "x": 550,
+        "y": 80,
+        "wires": [
+            [
+                "47437283085d70b3"
+            ]
+        ]
+    },
+    {
+        "id": "2bd3272e8160f812",
+        "type": "http in",
+        "z": "cedd9dfbf216c7cf",
+        "name": "",
+        "url": "/update/:id",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 200,
+        "y": 360,
+        "wires": [
+            [
+                "5a6122bdf289747f",
+                "84a583e69b1f960d"
+            ]
+        ]
+    },
+    {
+        "id": "cb3565e131b19d3d",
+        "type": "http response",
+        "z": "cedd9dfbf216c7cf",
+        "name": "",
+        "statusCode": "302",
+        "headers": {
+            "location": "/"
+        },
+        "x": 800,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "5a6122bdf289747f",
+        "type": "function",
+        "z": "cedd9dfbf216c7cf",
+        "name": "function 3",
+        "func": "msg.payload.status = \"Düzenlendi\"\n\nmsg.payload = [\n    {\n        _id: msg.req.params.id\n    },\n    {\n        $set: msg.payload\n    }\n]\n\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 380,
+        "y": 360,
+        "wires": [
+            [
+                "45e0e8a2527f72c1",
+                "2d084a8dfa18b102"
+            ]
+        ]
+    },
+    {
+        "id": "45e0e8a2527f72c1",
+        "type": "mongodb4",
+        "z": "cedd9dfbf216c7cf",
+        "clientNode": "6add0a7033982977",
+        "mode": "collection",
+        "collection": "todo",
+        "operation": "updateOne",
+        "output": "toArray",
+        "handleDocId": true,
+        "name": "",
+        "x": 550,
+        "y": 360,
+        "wires": [
+            [
+                "cb3565e131b19d3d"
+            ]
+        ]
+    },
+    {
+        "id": "2aba29d86c8db3b4",
+        "type": "http in",
+        "z": "cedd9dfbf216c7cf",
+        "name": "",
+        "url": "/update/:id",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 200,
+        "y": 460,
+        "wires": [
+            [
+                "e6ba6f7dc16b2bd7"
+            ]
+        ]
+    },
+    {
+        "id": "8015b369fc97fe74",
+        "type": "mongodb4",
+        "z": "cedd9dfbf216c7cf",
+        "clientNode": "6add0a7033982977",
+        "mode": "collection",
+        "collection": "todo",
+        "operation": "findOne",
+        "output": "toArray",
+        "handleDocId": true,
+        "name": "",
+        "x": 540,
+        "y": 460,
+        "wires": [
+            [
+                "71ef7bd1f5f61a77"
+            ]
+        ]
+    },
+    {
+        "id": "e6ba6f7dc16b2bd7",
+        "type": "function",
+        "z": "cedd9dfbf216c7cf",
+        "name": "function 4",
+        "func": "msg.payload = [\n    {\n        _id: msg.req.params.id\n    }\n]\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 380,
+        "y": 460,
+        "wires": [
+            [
+                "8015b369fc97fe74"
+            ]
+        ]
+    },
+    {
+        "id": "71ef7bd1f5f61a77",
+        "type": "template",
+        "z": "cedd9dfbf216c7cf",
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "<!doctype html>\n<html>\n\n  <head>\n    <meta charset=\"utf-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>TODO BTK</title>\n    <link href=\"https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css\" rel=\"stylesheet\" integrity=\"sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65\" crossorigin=\"anonymous\">\n  </head>\n\n  <body>\n    <div class=\"container mt-5\">\n      {{#error}}\n        <div class=\"alert alert-danger\">\n          {{message}}\n        </div>\n      {{/error}}\n      <form action=\"/update/{{payload._id}}\" method=\"POST\">\n        <div class=\"input-group mb-3\">\n          <input type=\"text\" class=\"form-control\" placeholder=\"Recipient's username\" name=\"item\" value=\"{{payload.item}}\">\n          <button class=\"btn btn-outline-secondary\" type=\"reset\">Temizle</button>\n          <button class=\"btn btn-outline-info\" type=\"submit\">Güncelle</button>\n        </div>\n      </form>\n    </div>\n    <script src=\"https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js\" integrity=\"sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4\" crossorigin=\"anonymous\"></script>\n    <script src=\"https://code.jquery.com/jquery-3.6.3.min.js\" integrity=\"sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=\" crossorigin=\"anonymous\"></script>\n    <script src=\"js/main.js\"></script>\n  </body>\n\n</html>",
+        "output": "str",
+        "x": 680,
+        "y": 460,
+        "wires": [
+            [
+                "430df864bbbb38b1"
+            ]
+        ]
+    },
+    {
+        "id": "430df864bbbb38b1",
+        "type": "http response",
+        "z": "cedd9dfbf216c7cf",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 830,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "84a583e69b1f960d",
+        "type": "debug",
+        "z": "cedd9dfbf216c7cf",
+        "name": "debug 5",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 380,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "2d084a8dfa18b102",
+        "type": "debug",
+        "z": "cedd9dfbf216c7cf",
+        "name": "debug 6",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 560,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "47437283085d70b3",
+        "type": "function",
+        "z": "cedd9dfbf216c7cf",
+        "name": "button visibility",
+        "func": "msg.payload.forEach(x => {\n    x.completed = x.status === \"Tamamlandı\"\n    x.visibleReopen = x.status === \"Tamamlandı\"\n})\n\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 720,
+        "y": 80,
+        "wires": [
+            [
+                "76617812bd86a86b"
+            ]
+        ]
+    },
+    {
+        "id": "6823bfc819e93041",
+        "type": "function",
+        "z": "cedd9dfbf216c7cf",
+        "name": "function 5",
+        "func": "msg.payload = [\n    {\n        _id: msg.req.params.id\n    },\n    {\n        $set: {\n            status: \"Tamamlandı\"\n        }\n    }\n]\n\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 580,
+        "wires": [
+            [
+                "fed5e72c9534f787",
+                "def8426c845a248e"
+            ]
+        ]
+    },
+    {
+        "id": "497f9a411fd86812",
+        "type": "http in",
+        "z": "cedd9dfbf216c7cf",
+        "name": "",
+        "url": "/complete/:id",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 230,
+        "y": 580,
+        "wires": [
+            [
+                "6823bfc819e93041",
+                "e95a4fb2e10e5544"
+            ]
+        ]
+    },
+    {
+        "id": "fed5e72c9534f787",
+        "type": "mongodb4",
+        "z": "cedd9dfbf216c7cf",
+        "clientNode": "6add0a7033982977",
+        "mode": "collection",
+        "collection": "todo",
+        "operation": "updateOne",
+        "output": "toArray",
+        "handleDocId": true,
+        "name": "",
+        "x": 570,
+        "y": 580,
+        "wires": [
+            [
+                "0594c676477e00b5"
+            ]
+        ]
+    },
+    {
+        "id": "def8426c845a248e",
+        "type": "debug",
+        "z": "cedd9dfbf216c7cf",
+        "name": "debug 7",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 580,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "e95a4fb2e10e5544",
+        "type": "debug",
+        "z": "cedd9dfbf216c7cf",
+        "name": "debug 8",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 400,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "0594c676477e00b5",
+        "type": "http response",
+        "z": "cedd9dfbf216c7cf",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 750,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "4e111782d9aba5f4",
+        "type": "http in",
+        "z": "cedd9dfbf216c7cf",
+        "name": "",
+        "url": "/reopen/:id",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 220,
+        "y": 700,
+        "wires": [
+            [
+                "8e4c9e3f436245d8",
+                "53a192394f1f7176"
+            ]
+        ]
+    },
+    {
+        "id": "8e4c9e3f436245d8",
+        "type": "function",
+        "z": "cedd9dfbf216c7cf",
+        "name": "function 6",
+        "func": "msg.payload = [\n    {\n        _id: msg.req.params.id\n    },\n    {\n        $set: {\n            status: \"Yeniden Oluşturuldu\"\n        }\n    }\n]\n\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 700,
+        "wires": [
+            [
+                "25a01eb003a815b7",
+                "3e7d6c51a59c8eb4"
+            ]
+        ]
+    },
+    {
+        "id": "53a192394f1f7176",
+        "type": "debug",
+        "z": "cedd9dfbf216c7cf",
+        "name": "debug 9",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 400,
+        "y": 660,
+        "wires": []
+    },
+    {
+        "id": "25a01eb003a815b7",
+        "type": "mongodb4",
+        "z": "cedd9dfbf216c7cf",
+        "clientNode": "6add0a7033982977",
+        "mode": "collection",
+        "collection": "todo",
+        "operation": "updateOne",
+        "output": "toArray",
+        "handleDocId": true,
+        "name": "",
+        "x": 570,
+        "y": 700,
+        "wires": [
+            [
+                "6acdae05095c6684"
+            ]
+        ]
+    },
+    {
+        "id": "3e7d6c51a59c8eb4",
+        "type": "debug",
+        "z": "cedd9dfbf216c7cf",
+        "name": "debug 10",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 580,
+        "y": 660,
+        "wires": []
+    },
+    {
+        "id": "6acdae05095c6684",
+        "type": "http response",
+        "z": "cedd9dfbf216c7cf",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 750,
+        "y": 700,
+        "wires": []
+    },
+    {
+        "id": "bb5c07747370d66b",
+        "type": "http in",
+        "z": "cedd9dfbf216c7cf",
+        "name": "",
+        "url": "/trash/:id",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 220,
+        "y": 820,
+        "wires": [
+            [
+                "554eb42a6e4ac0ab",
+                "07be86320086ca3c"
+            ]
+        ]
+    },
+    {
+        "id": "554eb42a6e4ac0ab",
+        "type": "function",
+        "z": "cedd9dfbf216c7cf",
+        "name": "function 7",
+        "func": "msg.payload = [\n    {\n        _id: msg.req.params.id\n    },\n    {\n        $set: {\n            status: \"Silindi\"\n        }\n    }\n]\n\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 820,
+        "wires": [
+            [
+                "fa5c93b18aefa083",
+                "4b3cf35e167613cc"
+            ]
+        ]
+    },
+    {
+        "id": "07be86320086ca3c",
+        "type": "debug",
+        "z": "cedd9dfbf216c7cf",
+        "name": "debug 11",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 400,
+        "y": 780,
+        "wires": []
+    },
+    {
+        "id": "fa5c93b18aefa083",
+        "type": "mongodb4",
+        "z": "cedd9dfbf216c7cf",
+        "clientNode": "6add0a7033982977",
+        "mode": "collection",
+        "collection": "todo",
+        "operation": "updateOne",
+        "output": "toArray",
+        "handleDocId": true,
+        "name": "",
+        "x": 570,
+        "y": 820,
+        "wires": [
+            [
+                "94f3eb3a2228a00f"
+            ]
+        ]
+    },
+    {
+        "id": "4b3cf35e167613cc",
+        "type": "debug",
+        "z": "cedd9dfbf216c7cf",
+        "name": "debug 12",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 580,
+        "y": 780,
+        "wires": []
+    },
+    {
+        "id": "94f3eb3a2228a00f",
+        "type": "http response",
+        "z": "cedd9dfbf216c7cf",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 750,
+        "y": 820,
+        "wires": []
+    },
+    {
+        "id": "bfbae66849860724",
+        "type": "function",
+        "z": "cedd9dfbf216c7cf",
+        "name": "function 8",
+        "func": "msg.payload = [\n    {\n        status: { $ne: \"Silindi\" }\n    }\n]\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 320,
+        "y": 80,
+        "wires": [
+            [
+                "55e7a552436f3b16"
+            ]
+        ]
+    }
+]

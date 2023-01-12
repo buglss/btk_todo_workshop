@@ -1,0 +1,45 @@
+Server Side Rendering
+Client Side Rendering
+    - AJAX
+    - API
+
+npm init --> NodeJS projesi oluştur.
+npm i node-red --> Node-Red paketini kur.
+robomongo --> mongodb ui
+
+http server --> Port
+
+Butonlar ------ Görüntüleme
+---------------------------------
+Düzenle ------- Oluşturuldu,Düzenlendi,Yeniden Oluşturuldu
+Tamamla ------- Oluşturuldu,Düzenlendi,Yeniden Oluşturuldu
+Sil     ------- Oluşturuldu,Düzenlendi,Yeniden Oluşturuldu
+Yeniden Aç ---- Tamamlandı
+
+Oluşturuldu,Düzenlendi,Yeniden Oluşturuldu --> 1
+Tamamlandı                                 --> 0
+
+    1           0
+Düzenle     Yeniden Aç
+Tamamla
+Sil
+
+{{#VARMI}}
+Düzenle
+{{/VARMI}}
+{{^YOKSA}}
+Yeniden Aç
+{{/YOKSA}}
+
+AJAX -- İstemci/Client Tarafından Request Atılması
+
+Callback - Promise
+Fetch API
+
+git init
+git remote add origin <REPO_URL>
+git status
+git add .
+git commit -m "Initial commit"
+git pull
+git push -u origin master

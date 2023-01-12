@@ -1,0 +1,15 @@
+{
+  "name": "todo_btk",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "node-red": "^3.0.2",
+    "node-red-contrib-mongodb4": "~1.9.1"
+  }
+}
